@@ -4,10 +4,8 @@
 ; Compile with Inno Setup 6:
 ;   "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" TXChat.iss
 
-#define AppVersion "1.0.0"
+#define AppVersion "1.0.1"
 #define Repo ".."
-#define ServerUrl "https://txchat.duckdns.org"
-#define StoatArgs "--force-server=" + ServerUrl
 
 [Setup]
 AppId={{03D84DD8-A4C7-407C-8DA4-1CFBD60CEE42}
@@ -34,7 +32,7 @@ UninstallDisplayName=TX Chat
 SetupIconFile={#Repo}\tx-icon.ico
 UninstallDisplayIcon={app}\tx-icon.ico
 InfoBeforeFile=info.txt
-VersionInfoVersion=1.0.0.0
+VersionInfoVersion=1.0.1.0
 VersionInfoProductName=TX Chat
 VersionInfoCompany=Philip Miller
 VersionInfoDescription=Opens Stoat on a private server
@@ -44,17 +42,22 @@ CloseApplications=yes
 WelcomeLabel2=This installs TX Chat for this Windows account.
 InfoBeforeLabel=TX Chat redirects Stoat to a private server.
 InfoBeforeClickLabel=When you are ready to continue, click Next.
-FinishedLabel=TX Chat redirects Stoat to the private server.%n%nOpen the TX Chat shortcut for the private server. Open the original Stoat shortcut for the public server.
+FinishedLabel=TX Chat redirects Stoat to the private server.%n%nOpen the TX Chat shortcut for the private server. Stoat no longer opens by itself at sign-in. Quit TX Chat before using the original Stoat shortcut for the public server.
 ConfirmUninstall=Uninstall TX Chat? This removes the TX Chat shortcuts. Stoat and the original Stoat shortcut stay installed.
 
 [Files]
 Source: "{#Repo}\tx-icon.ico"; DestDir: "{app}"
 Source: "info.txt"; DestDir: "{app}"; DestName: "Private server.txt"
 Source: "{#Repo}\app\Ensure-Stoat.ps1"; Flags: dontcopy
+Source: "{#Repo}\app\Open-TXChat.ps1"; DestDir: "{app}"
+Source: "{#Repo}\app\Open-TXChat.vbs"; DestDir: "{app}"
+
+[Registry]
+Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueName: "stoat-desktop"; Flags: deletevalue
 
 [Icons]
-Name: "{autoprograms}\TX Chat"; Filename: "{localappdata}\Stoat\stoat-desktop.exe"; Parameters: "{#StoatArgs}"; WorkingDir: "{localappdata}\Stoat"; IconFilename: "{app}\tx-icon.ico"; Comment: "Stoat on the private server txchat.duckdns.org"
-Name: "{autodesktop}\TX Chat"; Filename: "{localappdata}\Stoat\stoat-desktop.exe"; Parameters: "{#StoatArgs}"; WorkingDir: "{localappdata}\Stoat"; IconFilename: "{app}\tx-icon.ico"; Comment: "Stoat on the private server txchat.duckdns.org"
+Name: "{autoprograms}\TX Chat"; Filename: "{sys}\wscript.exe"; Parameters: "//B ""{app}\Open-TXChat.vbs"""; WorkingDir: "{app}"; IconFilename: "{app}\tx-icon.ico"; Comment: "Stoat on the private server txchat.duckdns.org"
+Name: "{autodesktop}\TX Chat"; Filename: "{sys}\wscript.exe"; Parameters: "//B ""{app}\Open-TXChat.vbs"""; WorkingDir: "{app}"; IconFilename: "{app}\tx-icon.ico"; Comment: "Stoat on the private server txchat.duckdns.org"
 
 [UninstallDelete]
 Type: files; Name: "{autoprograms}\TX Chat.lnk"

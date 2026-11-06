@@ -4,4 +4,6 @@ https://txchat.duckdns.org
 
 Stoat is downloaded and installed from the official release when it is not already on this PC. The original Stoat shortcut is left unchanged.
 
-To use the public server, open Stoat from the original shortcut.
+Stoat does not open on its own at sign-in. That start opens the public server and keeps TX Chat from switching to the private one.
+
+To use the public server, quit TX Chat, then open Stoat from the original shortcut.
